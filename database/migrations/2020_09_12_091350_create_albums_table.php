@@ -14,9 +14,11 @@ class CreateAlbumsTable extends Migration
     public function up()
     {
         Schema::create('albums', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
             $table->string('uuid',64);
-            $table->string('m_uuid',64);
-            $table->string('description');
+            $table->string('name');
+            $table->text('description');
             $table->string('thumbnail');
             $table->timestamps();
         });

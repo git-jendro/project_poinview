@@ -27,3 +27,9 @@ Route::group([
     Route::post('me', 'AuthController@me');
 
 });
+
+Route::get('albums','AlbumController@index');
+Route::get('albums/id','AlbumController@show');
+Route::post('albums','AlbumController@store');
+Route::put('albums/id','AlbumController@update');
+Route::delete('albums/id','AlbumController@destroy');
