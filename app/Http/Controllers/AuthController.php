@@ -43,7 +43,7 @@ class AuthController extends Controller
     public function me()
     {
         // return response()->json(auth()->user());
-        $user = User::where('id', auth()->user()->id)->firstOrFail();
+        $user = User::where('id', auth()->user()->id)->first();
         $user = $user->with('Albums')->get();
         return response()->json($user);
     }

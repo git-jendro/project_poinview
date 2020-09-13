@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Album;
+use App\User;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Uuid;
 
 class AlbumController extends Controller
 {
@@ -27,8 +29,8 @@ class AlbumController extends Controller
     public function store(Request $request)
     {
         $album  = new Album;
-        $album->uuid = $request->uuid;
-        $album->m_uuid = $request->m_uuid;
+        $album->uuid = Uuid::uuid4()->toString();
+        $album->user_id = User::where('id', auth()->user()->id)->firstOrFail();
         $album->description = $request->description;
         $album->thumbnail = $request->thumbnail;
 
@@ -47,7 +49,14 @@ class AlbumController extends Controller
      */
     public function show($id)
     {
-        //
+       if(Album::where('id',$id)->exists()){
+           $album = Album::where('id',$id)->get()->toJson(JSON_PRETTY_PRINT);
+           return response($album, 200);
+       }else {
+           return response()->json([
+               "messsage" => "Record not found"
+           ], 404);
+       }
     }
 
     /**
@@ -59,7 +68,23 @@ class AlbumController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (Album::where('id', $id)->exists()) {
+            $album = Album::find($id);
+            
+            $album->uuid = Uuid::uuid4()->toString();
+            $album->user_id = User::where('id', auth()->user()->id)->firstOrFail();
+            $album->description = is_null($request->description) ? $album->description : $request->description;
+            $album->thumbnail = is_null($request->thumbnail) ? $album->thumbnail : $request->thumbnail;
+            $album->save();
+
+            return response()->json([
+                "message" => "Record updated"
+            ],200);
+        }else {
+            return response()->json([
+                "message" => "Record not found"
+            ], 404);
+        }
     }
 
     /**
@@ -70,6 +95,17 @@ class AlbumController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Album::where('id', $id)->exists()) {
+            $album = Album::find($id);
+            $album->delete();
+
+            return response()->json([
+                "message" => "Record deleted"
+            ], 202);
+        }else{
+            return response()->json([
+                "message" => "Record not found"
+            ], 404);
+        }
     }
 }
