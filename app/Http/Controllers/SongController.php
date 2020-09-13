@@ -35,7 +35,11 @@ class SongController extends Controller
         $song->lyric = $request->lyric;
         $song->description = $request->description;
         $song->thumbnail = $request->file('thumbnail')->store('thumbnail');
+        $song->save();
 
+        return response()->json([
+            "message" => "Record stored"
+        ], 201);
     }
 
     /**

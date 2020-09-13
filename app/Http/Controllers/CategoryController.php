@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Uuid;
 
 class CategoryController extends Controller
 {
@@ -13,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        
+        $category = Category::get()->toJson(JSON_PRETTY_PRINT);
+        return response($category,200);
     }
 
     /**
@@ -24,7 +27,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = new Category;
+        $category->uuid = Uuid::uuid4()->toString();
+        $category->name = $request->name;
+        $category->status = $request->status;
+
     }
 
     /**
@@ -35,7 +42,14 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        if (Category::where('id', $id)->exists()) {
+            $category = Category::find($id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response()->json($category,200);
+        }else {
+            return response()->json([
+                "message" => "Record not Found"
+            ], 404);
+        }
     }
 
     /**
@@ -47,7 +61,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (Category::where('id', $id)->exists()) {
+            $category = Category::find($id);
+
+            $category->uuid = Uuid::uuid4()->toString();
+            $category->name = is_null($request->name) ? $category->name : $request->name;
+            $category->status = is_null($request->status) ? $category->status : $request->status;
+        }
     }
 
     /**
@@ -58,6 +78,17 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Category::where('id', $id)->exists()) {
+            $category = Category::find($id);
+            $category->delete();
+
+            return response()->json([
+                "message" => "Record deleted"
+            ], 202);
+        }else {
+            return response()->json([
+                "message" => "Record not found"
+            ], 404);
+        }
     }
 }

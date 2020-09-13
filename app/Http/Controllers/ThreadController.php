@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Thread;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
 class ThreadController extends Controller
 {
@@ -14,7 +17,8 @@ class ThreadController extends Controller
      */
     public function index()
     {
-        //
+        $thread = Thread::get()->toJson(JSON_PRETTY_PRINT);
+        return response($thread,200);
     }
 
     /**
@@ -25,7 +29,19 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $thread = new Thread;
+        $thread->uuid = Uuid::uuid4()->toString();
+        $thread->user_id = User::where('id', auth()->user()->id)->first();
+        $thread->category_id = $request->category_id;
+        $thread->slug = $request->slug;
+        $thread->heading = $request->heading;
+        $thread->body = $request->body;
+        $thread->status = $request->status;
+        $thread->save();
+
+        return response()->json([
+            "message" => "Record stored"
+        ], 201);
     }
 
     /**
@@ -36,7 +52,14 @@ class ThreadController extends Controller
      */
     public function show($id)
     {
-        //
+        if (Thread::where('id',$id)->exists()) {
+            $thread = Thread::wherer('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response()->json($thread,200);
+        }else {
+            return response()->json([
+                "message" => "Record not found"
+            ], 404);
+        }
     }
 
     /**
@@ -48,7 +71,25 @@ class ThreadController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (Thread::where('id', $id)->exists()) {
+            $thread = Thread::find($id);
+
+            $thread->uui = $thread->uuid;
+            $thread->category_id = is_null($request->category_id) ? $thread->category_id : $request->category_id;
+            $thread->user_id = User::where('id', auth()->user()->id)->first();
+            $thread->slug = is_null($request->slug) ? $thread->slug : $request->slug;
+            $thread->heading = is_null($request->heading) ? $thread->heading : $request->heading;
+            $thread->body = is_null($request->body) ? $thread->body : $request->body;
+            $thread->status = is_null($request->status) ? $thread->status : $request->status;
+            
+            return response()->json([
+                "message" => "Record updated"
+            ], 200);
+        }else {
+            return response()->json([
+                "message" => "Record not found"
+            ]);
+        }
     }
 
     /**
@@ -59,6 +100,17 @@ class ThreadController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (Thread::where('id', $id)->exists()) {
+            $thread = Thread::find($id);
+            $thread->delete();
+
+            return response()->json([
+                "message" => "Record deleted"
+            ], 202);
+        }else {
+            return response()->json([
+                "message" => "Record not found"
+            ]);
+        }
     }
 }
