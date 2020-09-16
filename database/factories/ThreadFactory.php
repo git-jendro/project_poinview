@@ -11,9 +11,8 @@ $factory->define(Thread::class, function (Faker $faker) {
         'uuid' => Uuid::uuid4()->toString(),
         'category_id' => factory(App\Category::class)->create()->id,
         'user_id' => factory(App\User::class)->create()->id,
-        'slug' => $faker->text(),
+        'slug' => $faker->slug(),
         'heading' => $faker->title(),
         'body' => $faker->text(),
-        'status' => $faker->boolean($chanceOfGettingTrue = 50),
     ];
 });

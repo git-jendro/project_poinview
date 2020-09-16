@@ -48,16 +48,25 @@ class SongController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($uuid)
     {
-        if (Song::wherer('id', $id)->exists()) {
-            $song = Song::where('id',$id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response()->json($song,200);
-        }else {
+        // if (Song::wherer('id', $id)->exists()) {
+        //     $song = Song::where('id',$id)->get()->toJson(JSON_PRETTY_PRINT);
+        //     return response($song, 200);
+        // }else {
+        //     return response()->json([
+        //         "message" => "Record not found"
+        //     ], 404);
+        // }
+
+        if (Song::where('uuid', $uuid)->exists()) {
+            $song = Song::where('uuid', $uuid)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($song, 200);
+          } else {
             return response()->json([
-                "message" => "Record not found"
+              "message" => "Record not found"
             ], 404);
-        }
+          }
     }
 
     /**

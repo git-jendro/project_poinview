@@ -30,7 +30,6 @@ class CategoryController extends Controller
         $category = new Category;
         $category->uuid = Uuid::uuid4()->toString();
         $category->name = $request->name;
-        $category->status = $request->status;
 
     }
 
@@ -43,13 +42,13 @@ class CategoryController extends Controller
     public function show($id)
     {
         if (Category::where('id', $id)->exists()) {
-            $category = Category::find($id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response()->json($category,200);
-        }else {
+            $category = Category::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($category, 200);
+          } else {
             return response()->json([
-                "message" => "Record not Found"
+              "message" => "Record not found"
             ], 404);
-        }
+          }
     }
 
     /**

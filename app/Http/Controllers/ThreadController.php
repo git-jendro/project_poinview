@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Thread;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 
@@ -31,12 +32,11 @@ class ThreadController extends Controller
     {
         $thread = new Thread;
         $thread->uuid = Uuid::uuid4()->toString();
-        $thread->user_id = User::where('id', auth()->user()->id)->first();
+        $thread->user_id = Auth::user()->id;
         $thread->category_id = $request->category_id;
-        $thread->slug = $request->slug;
         $thread->heading = $request->heading;
         $thread->body = $request->body;
-        $thread->status = $request->status;
+        $thread->slug = Str::slug($request->heading);
         $thread->save();
 
         return response()->json([
@@ -50,16 +50,18 @@ class ThreadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        if (Thread::where('id',$id)->exists()) {
-            $thread = Thread::wherer('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response()->json($thread,200);
-        }else {
+        
+        if (Thread::where('slug', $slug)->exists()) {
+            $thread = Thread::where('slug', $slug)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($thread, 200);
+          } else {
             return response()->json([
-                "message" => "Record not found"
+              "message" => "Record not found"
             ], 404);
-        }
+          }
+        
     }
 
     /**

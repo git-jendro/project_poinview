@@ -18,10 +18,10 @@ class CreateThreadsTable extends Migration
             $table->string('uuid',64);
             $table->integer('category_id');
             $table->integer('user_id');
-            $table->string('slug');
             $table->string('heading');
+            $table->string('slug');
             $table->text('body');
-            $table->boolean('status');
+            $table->boolean('status')->default(1)->nullable();
             $table->timestamps();
         });
     }

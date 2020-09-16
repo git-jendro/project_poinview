@@ -29,29 +29,29 @@ Route::group([
 });
 
 //Route Albums
-Route::get('albums','AlbumController@index');
-Route::get('albums/{id}','AlbumController@show');
-Route::post('albums','AlbumController@store');
-Route::put('albums/{id}','AlbumController@update');
-Route::delete('albums/{id}','AlbumController@destroy');
+Route::get('album','AlbumController@index');
+Route::get('album/{id}','AlbumController@show');
+Route::post('album','AlbumController@store');
+Route::put('album/{id}','AlbumController@update');
+Route::delete('album/{id}','AlbumController@destroy');
 
 //Route Songs
-Route::get('songs','SongController@index');
-Route::get('songs/{id}','SongController@show');
-Route::post('songs','SongController@store');
-Route::put('songs/{id}','SongController@update');
-Route::delete('songs/{id}','SongController@destroy');
+Route::get('song','SongController@index');
+Route::get('song/{id}','SongController@show');
+Route::post('song','SongController@store');
+Route::put('song/{id}','SongController@update');
+Route::delete('song/{id}','SongController@destroy');
 
 //Route Categories
-Route::get('categories','CategoryController@index');
-Route::get('categories/{id}','CategoryController@show');
-Route::post('categories','CategoryController@store');
-Route::put('categories/{id}','CategoryController@update');
-Route::delete('categories/{id}','CategoryController@destroy');
+Route::get('category','CategoryController@index');
+Route::get('category/{id}','CategoryController@show');
+Route::post('category','CategoryController@store');
+Route::put('category/{id}','CategoryController@update');
+Route::delete('category/{id}','CategoryController@destroy');
 
 //Route Thread
-Route::get('threads','ThreadController@index');
-Route::get('threads/{id}','ThreadController@show');
-Route::post('threads','ThreadController@store');
-Route::put('threads/{id}','ThreadController@update');
-Route::delete('threads/{id}','ThreadController@destroy');
+Route::get('thread','ThreadController@index');
+Route::get('thread/{slug}','ThreadController@show');
+Route::post('thread','ThreadController@store');
+Route::put('thread/{slug}','ThreadController@update');
+Route::delete('thread/{slug}','ThreadController@destroy');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Album;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
 
 class AlbumController extends Controller
@@ -72,7 +73,7 @@ class AlbumController extends Controller
             $album = Album::find($id);
             
             $album->uuid = Uuid::uuid4()->toString();
-            $album->user_id = User::where('id', auth()->user()->id)->firstOrFail();
+            $album->user_id = Auth::user()->id;
             $album->description = is_null($request->description) ? $album->description : $request->description;
             $album->thumbnail = is_null($request->thumbnail) ? $album->thumbnail : $request->thumbnail;
             $album->save();

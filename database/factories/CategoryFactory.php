@@ -10,6 +10,5 @@ $factory->define(Category::class, function (Faker $faker) {
     return [
         'uuid' => Uuid::uuid4()->toString(),
         'name' => $faker->name(),
-        'status' => $faker->boolean($chanceOfGettingTrue = 50),
     ];
 });
