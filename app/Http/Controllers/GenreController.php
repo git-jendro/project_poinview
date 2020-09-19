@@ -67,7 +67,18 @@ class GenreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (Genre::where('id', $id)->exists()) {
+            $genre = Genre::find($id);
+
+            $genre->uuid = Uuid::uuid4()->toString();
+            $genre->album_id = is_null($request->album_id) ? $genre->album_id : $request->album_id;
+            $genre->name = is_null($request->name) ? $genre->name : $request->name;
+            $genre->genre = is_null($request->genre) ? $genre->genre : $request->genre;
+            $genre->lyric = is_null($request->lyric) ? $genre->lyric : $request->lyric;
+            $genre->description = is_null($request->description) ? $genre->description : $request->decription;
+            $genre->thumbnail = is_null($request->file('thumbnail')->store('thumbnail')) ? $genre->thumbnail : $request->file('thumbnail')->store('thumbnail');
+            $genre->save(); 
+        }
     }
 
     /**
@@ -78,6 +89,16 @@ class GenreController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(Genre::where('id', $id)->exists()){
+            $genre = Genre::find($id);
+            $genre->delete();
+            return response()->json([
+                "message" => "Record deleted"
+            ], 202);
+        }else {
+            return response()->json([
+                "message" => "Record not found"
+            ], 404);
+        }
     }
 }

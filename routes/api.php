@@ -37,17 +37,17 @@ Route::delete('album/{id}','AlbumController@destroy');
 
 //Route Songs
 Route::get('song','SongController@index');
-Route::get('song/{id}','SongController@show');
+Route::get('song/{slug}','SongController@show');
 Route::post('song','SongController@store');
-Route::put('song/{id}','SongController@update');
-Route::delete('song/{id}','SongController@destroy');
+Route::put('song/{slug}','SongController@update');
+Route::delete('song/{slug}','SongController@destroy');
 
 //Route Categories
 Route::get('category','CategoryController@index');
-Route::get('category/{id}','CategoryController@show');
+Route::get('category/{slug}','CategoryController@show');
 Route::post('category','CategoryController@store');
-Route::put('category/{id}','CategoryController@update');
-Route::delete('category/{id}','CategoryController@destroy');
+Route::put('category/{slug}','CategoryController@update');
+Route::delete('category/{slug}','CategoryController@destroy');
 
 //Route Thread
 Route::get('thread','ThreadController@index');
@@ -55,3 +55,10 @@ Route::get('thread/{slug}','ThreadController@show');
 Route::post('thread','ThreadController@store');
 Route::put('thread/{slug}','ThreadController@update');
 Route::delete('thread/{slug}','ThreadController@destroy');
+
+//Route Thread
+Route::get('genre','GenreController@index');
+Route::get('genre/{name}','GenreController@show');
+Route::post('genre','GenreController@store');
+Route::put('genre/{name}','GenreController@update');
+Route::delete('genre/{name}','GenreController@destroy');

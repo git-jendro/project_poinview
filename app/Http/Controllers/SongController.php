@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Song;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
 
 class SongController extends Controller
@@ -34,7 +36,8 @@ class SongController extends Controller
         $song->genre = $request->genre;
         $song->lyric = $request->lyric;
         $song->description = $request->description;
-        $song->thumbnail = $request->file('thumbnail')->store('thumbnail');
+        $song->song = Storage::put('Song', $request->song);
+        $song->thumbnail = Storage::put('Thumbnail', $request->thumbnail);
         $song->save();
 
         return response()->json([
