@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Genre extends Model
 {
     protected $fillable = [
-        'uuid', 'name', 'description'
+        'uuid', 'name','slug', 'description'
     ];
 
     public function album()

@@ -18,8 +18,9 @@ class CreateAlbumsTable extends Migration
             $table->integer('user_id');
             $table->string('uuid',64);
             $table->string('name');
+            $table->string('slug');
             $table->text('description');
-            $table->string('thumbnail');
+            $table->string('thumbnail')->nullable();
             $table->timestamps();
         });
     }

@@ -11,6 +11,7 @@ $factory->define(Song::class, function (Faker $faker) {
         'uuid' => Uuid::uuid4()->toString(),
         'album_id' => factory(App\Album::class)->create()->id,
         'name' => $faker->name(),
+        'slug' => $faker->slug(),
         'genre' => $faker->word(),
         'lyric' => $faker->text(),
         'description' => $faker->text(),

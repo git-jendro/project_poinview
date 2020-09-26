@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
+use App\User;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
 
-class CategoryController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = Category::get()->toJson(JSON_PRETTY_PRINT);
-        return response($category,200);
+        $user = User::get()->json(JSON_PRETTY_PRINT);
+        return response($user,200);
     }
 
     /**
@@ -27,14 +27,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = new Category;
-        $category->uuid = Uuid::uuid4()->toString();
-        $category->name = $request->name;
-        $category->save();
+        $user = new User;
+        $user->uuid = Uuid::uuid4()->toString();
+        $user->name = $request->name;
+        $user->label = $request->label;
+        $user->photo = $request->photo;
+        $user->description = $request->description;
+        $user->save();
 
         return response()->json([
             "message" => "Record stored"
         ], 201);
+
+        
     }
 
     /**
@@ -43,16 +48,16 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($uuid)
     {
-        if (Category::where('id', $id)->exists()) {
-            $category = Category::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($category, 200);
-          } else {
+        if (User::where('uuid', $uuid)->exists()) {
+            $user = User::where('uuid', $uuid)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($user, 200);
+        }else {
             return response()->json([
-              "message" => "Record not found"
+                "message" => "Record not found"
             ], 404);
-          }
+        }
     }
 
     /**
@@ -62,21 +67,22 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $uuid)
     {
-        if (Category::where('id', $id)->exists()) {
-            $category = Category::find($id);
+        if (User::where('uuid', $uuid)->exists()) {
+            $user = User::find($uuid);
 
-            $category->uuid = Uuid::uuid4()->toString();
-            $category->name = is_null($request->name) ? $category->name : $request->name;
-            $category->status = is_null($request->status) ? $category->status : $request->status;
-            $category->save();
-
+            $user->uuid = is_null($request->uuid) ? $user->uuid : $request->uuid;
+            $user->name = is_null($request->name) ? $user->name : $request->name;
+            $user->label = is_null($request->label) ? $user->label : $request->label;
+            $user->photo = is_null($request->photo) ? $user->photo : $request->photo;
+            $user->description = is_null($request->description) ? $user->description : $request->description;
+            $user->save();
             return response()->json([
                 "message" => "Record updated"
             ], 200);
         }else {
-            return  response()->json([
+            return response()->json([
                 "message" => "Record not found"
             ], 404);
         }
@@ -88,11 +94,11 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($uuid)
     {
-        if (Category::where('id', $id)->exists()) {
-            $category = Category::find($id);
-            $category->delete();
+        if (User::where('uuid', $uuid)->exists()) {
+            $user = User::find($uuid);
+            $user->delete();
 
             return response()->json([
                 "message" => "Record deleted"

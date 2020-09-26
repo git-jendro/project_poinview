@@ -90,7 +90,7 @@ class ThreadController extends Controller
         }else {
             return response()->json([
                 "message" => "Record not found"
-            ]);
+            ], 404);
         }
     }
 
@@ -112,7 +112,7 @@ class ThreadController extends Controller
         }else {
             return response()->json([
                 "message" => "Record not found"
-            ]);
+            ], 404);
         }
     }
 }

@@ -32,6 +32,7 @@ class AlbumController extends Controller
         $album  = new Album;
         $album->uuid = Uuid::uuid4()->toString();
         $album->user_id = User::where('id', auth()->user()->id)->firstOrFail();
+        $album->name = $request->name;
         $album->description = $request->description;
         $album->thumbnail = $request->thumbnail;
 
@@ -74,6 +75,7 @@ class AlbumController extends Controller
             
             $album->uuid = Uuid::uuid4()->toString();
             $album->user_id = Auth::user()->id;
+            $album->name = is_null($request->name) ? $album->name : $request->name;
             $album->description = is_null($request->description) ? $album->description : $request->description;
             $album->thumbnail = is_null($request->thumbnail) ? $album->thumbnail : $request->thumbnail;
             $album->save();

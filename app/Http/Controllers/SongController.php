@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Str;
 
 class SongController extends Controller
 {
@@ -33,6 +34,7 @@ class SongController extends Controller
         $song->uuid = Uuid::uuid4()->toString();
         $song->album_id = $request->album_id;
         $song->name = $request->name;
+        $song->slug = Str::slug($request->name);
         $song->genre = $request->genre;
         $song->lyric = $request->lyric;
         $song->description = $request->description;
@@ -51,19 +53,11 @@ class SongController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($uuid)
+    public function show($slug)
     {
-        // if (Song::wherer('id', $id)->exists()) {
-        //     $song = Song::where('id',$id)->get()->toJson(JSON_PRETTY_PRINT);
-        //     return response($song, 200);
-        // }else {
-        //     return response()->json([
-        //         "message" => "Record not found"
-        //     ], 404);
-        // }
 
-        if (Song::where('uuid', $uuid)->exists()) {
-            $song = Song::where('uuid', $uuid)->get()->toJson(JSON_PRETTY_PRINT);
+        if (Song::where('slug', $slug)->exists()) {
+            $song = Song::where('slug', $slug)->get()->toJson(JSON_PRETTY_PRINT);
             return response($song, 200);
           } else {
             return response()->json([
@@ -81,16 +75,35 @@ class SongController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // if (Student::where('id', $id)->exists()) {
+        //     $student = Student::find($id);
+        //     $student->name = is_null($request->name) ? $student->name : $request->name;
+        //     $student->course = is_null($request->course) ? $student->course : $request->course;
+        //     $song->album_id = is_null($request->album_id) ? $song->album_id : $request->album_id;
+        //     $student->save();
+    
+        //     return response()->json([
+        //         "message" => "records updated successfully"
+        //     ], 200);
+        //     } else {
+        //     return response()->json([
+        //         "message" => "Student not found"
+        //     ], 404);
+            
+        // }
+
         if (Song::where('id',$id)->exists()) {
             $song = Song::find($id);
 
-            $song->uuid = Uuid::uuid4()->toString();
+            $song->uuid = is_null($request->uuid) ? $song->uuid : $request->uuid ;
             $song->album_id = is_null($request->album_id) ? $song->album_id : $request->album_id;
             $song->name = is_null($request->name) ? $song->name : $request->name;
+            $song->slug = is_null($request->slug) ? $song->slug : Str::slug($request->name);
             $song->genre = is_null($request->genre) ? $song->genre : $request->genre;
             $song->lyric = is_null($request->lyric) ? $song->lyric : $request->lyric;
             $song->description = is_null($request->description) ? $song->description : $request->decription;
-            $song->thumbnail = is_null($request->file('thumbnail')->store('thumbnail')) ? $song->thumbnail : $request->file('thumbnail')->store('thumbnail');
+            // $song->thumbnail = is_null($request->file('thumbnail')->store('thumbnail')) ? $song->thumbnail : $request->file('thumbnail')->store('thumbnail');
+            $song->thumbnail = Storage::putFile('thumbnail', $request->file('thumbnail'));
             $song->save();
 
             return response()->json([
@@ -99,7 +112,7 @@ class SongController extends Controller
         }else {
             return response()->json([
                 "message" => "Record not found"
-            ]);
+            ], 404);
         }
     }
 

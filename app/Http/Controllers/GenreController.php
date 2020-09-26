@@ -78,6 +78,14 @@ class GenreController extends Controller
             $genre->description = is_null($request->description) ? $genre->description : $request->decription;
             $genre->thumbnail = is_null($request->file('thumbnail')->store('thumbnail')) ? $genre->thumbnail : $request->file('thumbnail')->store('thumbnail');
             $genre->save(); 
+
+            return response()->json([
+                "message" => "Record updated"
+            ], 200);
+        }else {
+            return response()->json([
+                "message" => "Record not found"
+            ], 404);
         }
     }
 

@@ -30,16 +30,16 @@ Route::group([
 
 //Route Albums
 Route::get('album','AlbumController@index');
-Route::get('album/{id}','AlbumController@show');
+Route::get('album/{user_id}/{id}','AlbumController@show');
 Route::post('album','AlbumController@store');
-Route::put('album/{id}','AlbumController@update');
-Route::delete('album/{id}','AlbumController@destroy');
+Route::put('album/{user_id}/{id}','AlbumController@update');
+Route::delete('album/{user_id}/{id}','AlbumController@destroy');
 
 //Route Songs
 Route::get('song','SongController@index');
 Route::get('song/{slug}','SongController@show');
 Route::post('song','SongController@store');
-Route::put('song/{slug}','SongController@update');
+Route::put('song/{id}','SongController@update');
 Route::delete('song/{slug}','SongController@destroy');
 
 //Route Categories
